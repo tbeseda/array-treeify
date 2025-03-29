@@ -6,14 +6,13 @@ describe('readme examples', () => {
   test('basic example', () => {
     const eagan = [
       'Kier Eagan',
-      ['...', ['...', 'Jame Eagan', ['Helena Eagan']]],
-      'Ambrose Eagan',
+      ['...', ['...', 'Jame Eagan', ['Helena Eagan']], 'Ambrose Eagan'],
     ]
     const expected = `Kier Eagan
 ├─ ...
-|  ├─ ...
-|  └─ Jame Eagan
-|     └─ Helena Eagan
+│  ├─ ...
+│  └─ Jame Eagan
+│     └─ Helena Eagan
 └─ Ambrose Eagan`
 
     const result = treeify(eagan)

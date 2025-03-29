@@ -54,17 +54,17 @@ const eagan = [
       '...',
       'Jame Eagan',
       ['Helena Eagan']
-    ], 
+    ],
+    'Ambrose Eagan',
   ],
-  'Ambrose Eagan'
 ]
 console.log(treeify(eagan))
 /*
 Kier Eagan
 ├─ ...
-|  ├─ ...
-|  └─ Jame Eagan
-|     └─ Helena Eagan
+│  ├─ ...
+│  └─ Jame Eagan
+│     └─ Helena Eagan
 └─ Ambrose Eagan
 */
 
