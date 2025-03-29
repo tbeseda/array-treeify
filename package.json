@@ -2,11 +2,7 @@
   "name": "array-treeify",
   "version": "0.1.1",
   "description": "",
-  "keywords": [
-    "ascii",
-    "tree",
-    "treeify"
-  ],
+  "keywords": ["ascii", "tree", "treeify"],
   "license": "MIT",
   "author": "tbeseda",
   "repository": {
@@ -16,9 +12,7 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist/index.js", "dist/index.d.ts"],
   "scripts": {
     "lint": "biome check --write .",
     "build": "rm -rf dist && tsc",
