@@ -1,6 +1,6 @@
 # 🪾 `array-treeify`
 
-**Simple ASCII trees from arrays. For your terminal and console displays.**
+**Simple text trees from arrays using Unicode box-drawing characters. For your terminal and console displays.**
 
 [![typescript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/array-treeify.svg)](https://www.npmjs.com/package/array-treeify)
@@ -8,7 +8,30 @@
 
 ## Overview
 
-`array-treeify` transforms nested arrays into beautiful ASCII trees with proper branching characters. Perfect for CLIs, debug outputs, or anywhere you need to visualize hierarchical data.
+`array-treeify` transforms nested arrays into text trees with proper branching characters. Perfect for CLIs, debug outputs, or anywhere you need to visualize hierarchical data.
+
+```typescript
+treeify([
+  'Lumon Industries',
+  [
+    'Board of Directors',
+    ['Natalie (Representative)'],
+    'Departments',
+    [
+      'Macrodata Refinement (Cobel)',
+      ['Milchick', 'Mark S.', ['Dylan G.', 'Irving B.', 'Helly R.']],
+    ],
+    'Other Departments',
+    [
+      'Optics & Design',
+      'Wellness Center',
+      'Mammalians Nurturable',
+      'Choreography and Merriment',
+    ],
+  ],
+])
+```
+
 
 ```
 Lumon Industries
@@ -37,7 +60,10 @@ npm install array-treeify
 ## Usage
 
 ```typescript
-function treeify(input: TreeInput): string
+function treeify(input: TreeInput, options?: {
+  chars?: TreeChars,  // Custom characters for the tree
+  plain?: boolean     // Use plain whitespace instead of Unicode box-drawing characters
+}): string
 ```
 
 `array-treeify` accepts a simple, intuitive array structure that's easy to build and manipulate:
@@ -66,6 +92,31 @@ Kier Eagan
 │  └─ Jame Eagan
 │     └─ Helena Eagan
 └─ Ambrose Eagan
+*/
+
+// Using custom characters
+const resultCustomChars = treeify(
+  eagan, 
+  { chars: { branch: '├• ', lastBranch: '└• ', pipe: '│  ', space: '   ' },
+})
+/*
+Kier Eagan
+├• ...
+│  ├• ...
+│  └• Jame Eagan
+│     └• Helena Eagan
+└• Ambrose Eagan
+*/
+
+// Using plain whitespace characters
+console.log(treeify(eagan, { plain: true }))
+/*
+Kier Eagan
+   ...
+      ...
+      Jame Eagan
+         Helena Eagan
+   Ambrose Eagan
 */
 
 // Nested example
@@ -109,6 +160,11 @@ The `treeify` function accepts arrays with the following structure:
 ['root', ['child'], 'sibling', ['nephew', 'niece']]   // 2 root nodes with children
 ['root', ['child', ['grandchild']]]                   // Grandchildren
 ```
+
+## Options
+
+- `chars`: Custom characters for the tree. Defaults to Unicode box-drawing characters.
+- `plain`: When true, uses plain whitespace characters instead of Unicode box-drawing characters.
 
 ## License
 

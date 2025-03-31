@@ -11,6 +11,6 @@
     "forceConsistentCasingInFileNames": true,
     "rootDir": "src"
   },
-  "include": ["src"],
+  "include": ["src/index.ts"],
   "exclude": ["node_modules", "dist"]
 }

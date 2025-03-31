@@ -131,4 +131,67 @@ second
     console.log(`\n${treeify(input2)}`)
     console.log(`\n${treeify(input3)}`)
   })
+
+  test('plain option uses whitespace instead of Unicode characters', () => {
+    const input: TreeInput = ['root', ['child1', 'child2', ['grandchild']]]
+    const expected = `root
+   child1
+   child2
+      grandchild`
+
+    const result = treeify(input, { plain: true })
+    console.log('\nPlain whitespace tree:')
+    console.log(result)
+    assert.strictEqual(result, expected)
+  })
+
+  test('custom characters can be provided', () => {
+    const input: TreeInput = ['root', ['child1', 'child2']]
+    const customChars = {
+      branch: '├• ',
+      lastBranch: '└• ',
+      pipe: '│  ',
+      space: '   ',
+    }
+    const expected = `root
+├• child1
+└• child2`
+
+    const result = treeify(input, { chars: customChars })
+    console.log('\nCustom character tree:')
+    console.log(result)
+    assert.strictEqual(result, expected)
+  })
+
+  test('custom characters take precedence over plain option', () => {
+    const input: TreeInput = ['root', ['child1', 'child2']]
+    const customChars = {
+      branch: '├• ',
+      lastBranch: '└• ',
+      pipe: '│  ',
+      space: '   ',
+    }
+    const expected = `root
+├• child1
+└• child2`
+
+    const result = treeify(input, { plain: true, chars: customChars })
+    console.log('\nCustom characters with plain option:')
+    console.log(result)
+    assert.strictEqual(result, expected)
+  })
+
+  test('first element must be a string', () => {
+    assert.throws(() => treeify([null, ['child']] as unknown as TreeInput), {
+      message: 'First element must be a string',
+    })
+    assert.throws(() => treeify([1, ['child']] as unknown as TreeInput), {
+      message: 'First element must be a string',
+    })
+  })
+
+  test('empty or invalid input returns empty string', () => {
+    assert.strictEqual(treeify([] as unknown as TreeInput), '')
+    assert.strictEqual(treeify([undefined] as unknown as TreeInput), '')
+  })
 })

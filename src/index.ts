@@ -16,15 +16,32 @@ export type TreeInput = [string, ...Array<string | TreeNode[]>]
  */
 type FlexibleTreeInput = readonly (string | unknown[])[]
 
-const CHARS = {
-  BRANCH: '├─ ',
-  LAST_BRANCH: '└─ ',
-  PIPE: '│  ',
-  SPACE: '   ',
+type TreeChars = {
+  branch: string
+  lastBranch: string
+  pipe: string
+  space: string
+}
+
+/**
+ * @description ASCII characters used to render the tree.
+ */
+const DEFAULT_CHARS: TreeChars = {
+  branch: '├─ ',
+  lastBranch: '└─ ',
+  pipe: '│  ',
+  space: '   ',
+} as const
+const SPACE = ' ' as const
+const EMPTY_CHARS: TreeChars = {
+  branch: SPACE.repeat(DEFAULT_CHARS.branch.length),
+  lastBranch: SPACE.repeat(DEFAULT_CHARS.lastBranch.length),
+  pipe: SPACE.repeat(DEFAULT_CHARS.pipe.length),
+  space: SPACE.repeat(DEFAULT_CHARS.space.length),
 } as const
 
 /**
- * @description Creates an ASCII tree representation from a nested array structure.
+ * @description Creates a text tree representation from a nested array structure using Unicode box-drawing characters.
  *
  * The expected input format is a hierarchical structure where:
  * - The first element must be a string (the root node)
@@ -38,10 +55,14 @@ const CHARS = {
  * - `['root', ['child1', ['grandchild1', 'grandchild2']]]` creates a root with nested children
  * - `['root', ['childA', ['grandchildA'], 'childB']]` creates multiple branches
  *
- * The output uses ASCII characters to visualize the tree structure.
+ * The output uses Unicode box-drawing characters to visualize the tree structure.
  *
  * @param list {FlexibleTreeInput} - An array representing the tree structure. First element must be a string.
- * @returns {string} A string containing the ASCII tree representation
+ * @param options {Object} - An object containing optional configuration:
+ *   - `chars` {TreeChars} - Custom characters for the tree. Defaults to Unicode box-drawing characters.
+ *   - `plain` {boolean} - Whether to use plain whitespace characters instead of Unicode box-drawing characters.
+ *
+ * @returns {string} A string containing the tree representation
  *
  * @example
  * treeify(['root', ['child1', 'child2', ['grandchild']]])
@@ -50,11 +71,21 @@ const CHARS = {
  * //   └─ child2
  * //      └─ grandchild
  */
-export function treeify(list: FlexibleTreeInput): string {
+export function treeify(
+  list: FlexibleTreeInput,
+  options?: {
+    chars?: TreeChars
+    plain?: boolean
+  },
+): string {
   if (!Array.isArray(list) || list.length === 0) return ''
   if (list[0] === undefined) return ''
   if (typeof list[0] !== 'string')
     throw new Error('First element must be a string')
+
+  let chars = DEFAULT_CHARS
+  if (options?.plain) chars = EMPTY_CHARS
+  if (options?.chars) chars = options.chars
 
   const result: string[] = []
 
@@ -70,7 +101,7 @@ export function treeify(list: FlexibleTreeInput): string {
       i++
     } else if (Array.isArray(node)) {
       // array is the children of the previous item
-      renderTreeNodes(node, '', result)
+      renderTreeNodes(node, '', result, chars)
       i++
     } else {
       // idk. skip it.
@@ -88,6 +119,7 @@ function renderTreeNodes(
   nodes: TreeNode[],
   indent: string,
   result: string[],
+  chars: TreeChars,
 ): void {
   if (!Array.isArray(nodes) || nodes.length === 0) return
 
@@ -106,26 +138,26 @@ function renderTreeNodes(
 
       const isLast = !hasNextStringNode(nodes, childrenIndex + 1)
 
-      const prefix = isLast ? CHARS.LAST_BRANCH : CHARS.BRANCH
+      const prefix = isLast ? chars.lastBranch : chars.branch
       result.push(indent + prefix + stringNode)
 
       // children with increased indent
-      const childIndent = indent + (isLast ? CHARS.SPACE : CHARS.PIPE)
-      renderTreeNodes(arrayNode, childIndent, result)
+      const childIndent = indent + (isLast ? chars.space : chars.pipe)
+      renderTreeNodes(arrayNode, childIndent, result, chars)
 
       // skip both the parent node and its children array
       i += 2
     } else if (typeof node === 'string') {
       // string is simple. add it.
       const isLast = !hasNextStringNode(nodes, i + 1)
-      const prefix = isLast ? CHARS.LAST_BRANCH : CHARS.BRANCH
+      const prefix = isLast ? chars.lastBranch : chars.branch
       result.push(indent + prefix + node)
       i++
     } else if (Array.isArray(node)) {
       // (>_>)
       const isLast = i === nodes.length - 1
-      const childIndent = indent + (isLast ? CHARS.SPACE : CHARS.PIPE)
-      renderTreeNodes(node, childIndent, result)
+      const childIndent = indent + (isLast ? chars.space : chars.pipe)
+      renderTreeNodes(node, childIndent, result, chars)
       i++
     } else {
       // (0_o)

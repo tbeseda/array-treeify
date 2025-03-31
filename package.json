@@ -1,12 +1,7 @@
 {
   "name": "array-treeify",
   "version": "0.1.2",
-  "description": "",
-  "keywords": [
-    "ascii",
-    "tree",
-    "treeify"
-  ],
+  "description": "Simple text tree diagrams from arrays.",
   "license": "MIT",
   "author": "tbeseda",
   "repository": {
@@ -17,20 +12,31 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/index.js",
-    "dist/index.d.ts"
+    "dist/"
   ],
   "scripts": {
     "lint": "biome check --write .",
     "build": "rm -rf dist && tsc",
-    "pretest": "npm run build",
-    "test": "node --test",
+    "test": "tsx --test",
     "posttest": "npm run lint",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/node": "^22.13.14",
-    "typescript": "^5.3.3"
-  }
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "keywords": [
+    "ascii",
+    "unicode",
+    "tree",
+    "treeify",
+    "diagram",
+    "cli",
+    "output",
+    "pretty",
+    "pretty print",
+    "pretty print tree"
+  ]
 }
