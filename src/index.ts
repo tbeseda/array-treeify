@@ -8,7 +8,7 @@ type TreeNode = string | TreeNode[]
  * The strict tree input format. Must start with a string.
  * This type is exported for testing purposes and advanced usage.
  */
-export type TreeInput = [string, ...Array<string | TreeNode[]>]
+export type TreeInput = [string, ...Array<string | TreeNode[]>] | string[]
 
 /**
  * Flexible input type that accepts any array.
