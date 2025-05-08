@@ -1,14 +1,14 @@
 /**
+ * The strict tree input format. Must start with a string.
+ * This type is exported for testing purposes and advanced usage.
+ */
+export type TreeInput = Array<string | TreeInput>
+
+/**
  * Represents a node in the tree structure.
  * Can be either a string (a leaf node) or an array of TreeNodes (a branch with children).
  */
 type TreeNode = string | TreeNode[]
-
-/**
- * The strict tree input format. Must start with a string.
- * This type is exported for testing purposes and advanced usage.
- */
-export type TreeInput = [string, ...Array<string | TreeNode[]>] | string[]
 
 /**
  * Flexible input type that accepts any array.
@@ -16,16 +16,16 @@ export type TreeInput = [string, ...Array<string | TreeNode[]>] | string[]
  */
 type FlexibleTreeInput = readonly (string | unknown[])[]
 
-type TreeChars = {
+/**
+ * ASCII characters used to render the tree.
+ */
+export type TreeChars = {
   branch: string
   lastBranch: string
   pipe: string
   space: string
 }
 
-/**
- * @description ASCII characters used to render the tree.
- */
 const DEFAULT_CHARS: TreeChars = {
   branch: '├─ ',
   lastBranch: '└─ ',

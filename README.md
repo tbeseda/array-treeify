@@ -149,6 +149,9 @@ Lumon Industries
 
 ## Input Format
 
+> **Disclaimer:**
+> The exported `TreeInput` type (`Array<string | TreeInput>`) is intentionally flexible to support dynamic and programmatic tree construction. However, TypeScript cannot enforce at the type level that the first element is a string. This requirement is checked at runtime by the `treeify` function, which will throw an error if the first element is not a string. Please ensure your input arrays follow this convention.
+
 The `treeify` function accepts arrays with the following structure:
 
 1. First element must be a string (the root node)
