@@ -4,6 +4,7 @@
 
 [![typescript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![npm](https://img.shields.io/npm/v/array-treeify.svg)](https://www.npmjs.com/package/array-treeify)
+[![ci](https://github.com/tbeseda/array-treeify/actions/workflows/ci.yml/badge.svg)](https://github.com/tbeseda/array-treeify/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/tbeseda/array-treeify/blob/main/LICENSE)
 
 ## Overview
@@ -56,6 +57,8 @@ Lumon Industries
 ```bash
 npm install array-treeify
 ```
+
+Zero dependencies, ESM only. Requires Node.js 22 or newer (or any runtime that supports ES modules).
 
 ## Usage
 
@@ -168,6 +171,19 @@ The `treeify` function accepts arrays with the following structure:
 
 - `chars`: Custom characters for the tree. Defaults to Unicode box-drawing characters.
 - `plain`: When true, uses plain whitespace characters instead of Unicode box-drawing characters.
+
+## Development
+
+Source lives in `src/` and runs directly on Node.js — the tests are `.ts` files executed by Node's built-in test runner and type stripping, so there's no build step or loader involved in testing. Node.js 22.18 or newer is required to work on the library.
+
+```bash
+npm test          # node --test
+npm run typecheck # tsc, covers src/ including tests
+npm run lint      # biome ci, no writes
+npm run lint:write
+npm run check     # typecheck + lint, what CI runs
+npm run build     # emit dist/ with declarations
+```
 
 ## License
 
