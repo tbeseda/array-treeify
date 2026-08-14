@@ -152,13 +152,10 @@ Lumon Industries
 
 ## Input Format
 
-> **Disclaimer:**
-> The exported `TreeInput` type (`Array<string | TreeInput>`) is intentionally flexible to support dynamic and programmatic tree construction. However, TypeScript cannot enforce at the type level that the first element is a string. This requirement is checked at runtime by the `treeify` function, which will throw an error if the first element is not a string. Please ensure your input arrays follow this convention.
-
 The `treeify` function accepts arrays with the following structure:
 
 1. First element must be a string (the root node)
-2. Subsequent elements can be strings (nodes at same level) or arrays (children of previous node)
+2. Subsequent elements can be labels (nodes at same level) or arrays (children of previous node)
 3. Arrays can be nested to any depth
 
 ```typescript
@@ -166,6 +163,35 @@ The `treeify` function accepts arrays with the following structure:
 ['root', ['child'], 'sibling', ['nephew', 'niece']]   // 2 root nodes with children
 ['root', ['child', ['grandchild']]]                   // Grandchildren
 ```
+
+### Labels
+
+Any value that isn't an array is a label. Non-strings are stringified, so numbers and booleans work anywhere a string does — including as parent nodes:
+
+```typescript
+console.log(treeify(['deploys', [2025, ['spring', 'summer'], 2026, ['q1']]]))
+/*
+deploys
+├─ 2025
+│  ├─ spring
+│  └─ summer
+└─ 2026
+   └─ q1
+*/
+```
+
+### Errors
+
+`treeify` throws a `TypeError` when it can't render what it was given:
+
+- the input is not an array — `array-treeify: expected an array, received null`
+- the first element is not a string — `array-treeify: expected the first element to be a string, received number (1)`
+
+An empty array returns an empty string, so `treeify([])` is a safe way to say "nothing to render".
+
+### Types
+
+The exported `TreeInput` type (`Array<string | TreeInput>`) is intentionally permissive so trees can be assembled programmatically — build an array up with `push` and hand it over. A tuple type such as `[string, ...(string | TreeInput)[]]` *could* require a string first element at compile time, but it would rule out that dynamic construction, so the rule is enforced at runtime instead.
 
 ## Options
 

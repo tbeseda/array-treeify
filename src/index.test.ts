@@ -183,15 +183,53 @@ second
 
   test('first element must be a string', () => {
     assert.throws(() => treeify([null, ['child']] as unknown as TreeInput), {
-      message: 'First element must be a string',
+      name: 'TypeError',
+      message:
+        'array-treeify: expected the first element to be a string, received null',
     })
     assert.throws(() => treeify([1, ['child']] as unknown as TreeInput), {
-      message: 'First element must be a string',
+      name: 'TypeError',
+      message:
+        'array-treeify: expected the first element to be a string, received number (1)',
+    })
+    assert.throws(() => treeify([undefined] as unknown as TreeInput), {
+      name: 'TypeError',
+      message:
+        'array-treeify: expected the first element to be a string, received undefined',
     })
   })
 
-  test('empty or invalid input returns empty string', () => {
+  test('input must be an array', () => {
+    for (const input of [null, undefined, 'root', 42, {}]) {
+      assert.throws(() => treeify(input as unknown as TreeInput), {
+        name: 'TypeError',
+        message: /^array-treeify: expected an array, received /,
+      })
+    }
+  })
+
+  test('empty input returns empty string', () => {
     assert.strictEqual(treeify([] as unknown as TreeInput), '')
-    assert.strictEqual(treeify([undefined] as unknown as TreeInput), '')
+  })
+
+  test('non-string labels are stringified rather than dropped', () => {
+    assert.strictEqual(
+      treeify(['root', [1, true, null]] as unknown as TreeInput),
+      `root
+├─ 1
+├─ true
+└─ null`,
+    )
+  })
+
+  test('a non-string label can be a parent node', () => {
+    assert.strictEqual(
+      treeify(['root', [2025, ['q1', 'q2'], 'note']] as unknown as TreeInput),
+      `root
+├─ 2025
+│  ├─ q1
+│  └─ q2
+└─ note`,
+    )
   })
 })

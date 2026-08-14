@@ -115,4 +115,19 @@ describe('readme examples', () => {
     console.log(result)
     assert.strictEqual(result, expected)
   })
+
+  test('labels example', () => {
+    const deploys = ['deploys', [2025, ['spring', 'summer'], 2026, ['q1']]]
+    const expected = `deploys
+├─ 2025
+│  ├─ spring
+│  └─ summer
+└─ 2026
+   └─ q1`
+
+    const result = treeify(deploys)
+    console.log('\nLabels example:')
+    console.log(result)
+    assert.strictEqual(result, expected)
+  })
 })

@@ -23,7 +23,9 @@ describe('treeify types', () => {
     // @ts-expect-error
     const inputWithoutRootString: TreeInput = [{ bad: 'root' }, 'root2']
     assert.throws(() => treeify(inputWithoutRootString), {
-      message: 'First element must be a string',
+      name: 'TypeError',
+      message:
+        'array-treeify: expected the first element to be a string, received object',
     })
 
     const inputWithRootStringAndInvalidValues: TreeInput = ['root']
@@ -32,7 +34,16 @@ describe('treeify types', () => {
     // @ts-expect-error
     inputWithRootStringAndInvalidValues.push({}, [], Number.POSITIVE_INFINITY)
     result = treeify(inputWithRootStringAndInvalidValues)
-    assert.ok(result) // non-strings are ignored
+    // non-strings are stringified, empty arrays render nothing
+    assert.equal(result, 'root\n1\n[object Object]\nInfinity')
+  })
+
+  test('non-string labels need no cast', () => {
+    const result = treeify(['deploys', [2025, ['spring', 'summer'], true]])
+    assert.equal(
+      result,
+      'deploys\n├─ 2025\n│  ├─ spring\n│  └─ summer\n└─ true',
+    )
   })
 
   test('generated inputs', () => {
