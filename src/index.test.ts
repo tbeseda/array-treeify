@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
-import { type TreeInput, treeify } from './index.js'
+import { type TreeInput, treeify } from './index.ts'
 
 describe('treeify utility', () => {
   test('basic tree with root and children', () => {

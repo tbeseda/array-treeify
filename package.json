@@ -11,21 +11,32 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
   "files": [
     "dist/"
   ],
   "scripts": {
-    "lint": "biome check --write .",
-    "build": "rm -rf dist && tsc",
-    "test": "tsx --test",
-    "posttest": "npm run lint",
+    "lint": "biome ci .",
+    "lint:write": "biome check --write .",
+    "check": "npm run typecheck && npm run lint",
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "test": "node --test",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@types/node": "^22.15.15",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "@biomejs/biome": "^2.5.8",
+    "@types/node": "^22",
+    "typescript": "^7.0.2"
   },
   "keywords": [
     "ascii",
