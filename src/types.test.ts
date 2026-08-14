@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, test } from 'node:test'
-import { treeify } from './index.js'
-import type { TreeInput } from './index.js'
+import type { TreeInput } from './index.ts'
+import { treeify } from './index.ts'
 
 describe('treeify types', () => {
   test('input values', () => {

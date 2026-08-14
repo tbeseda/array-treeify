@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import { describe, test } from 'node:test'
-import { treeify } from './index.js'
+import { treeify } from './index.ts'
 
 describe('readme examples', () => {
   test('org chart example', () => {
